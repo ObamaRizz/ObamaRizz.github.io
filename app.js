@@ -17,7 +17,7 @@ function prepare(text) {
     // The regular expression matches:
     // - TeX equations enclosed in $$ or $
     // - Non-whitespace characters (words)
-    var regex = /(\$\$.*?\$\$|\$.*?\$)|([^\s]+)/g;
+    var regex = /(\$\$.*?\$\$)|(\$.*?\$)|([^\s]+)/g;
     var words = text.match(regex);
     // for(i = 0; i < lines.length; i++) {
     //     var lineWords = lines[i].split(' ');
@@ -32,7 +32,7 @@ function prepare(text) {
     var merged = false,
         dotPattern = /.*\./;
     for(i = 0; i < words.length; i++) {
-        if(word !== '') {
+        if(words[i] !== '') {
             var isSentenceEnd = false;
             // Check if the current word ends with a dot (sentence end)
             if(words[i].match(dotPattern)) {
@@ -43,12 +43,15 @@ function prepare(text) {
             // - The word is not merged with the previous word already
             // - The current index is greater than 0 (not the first word)
             // - The current word is not a TeX equation (doesn't start with $)
-            if(prefs.merge && words[i].length <= 3 && !merged && i > 0) {
+            if (prefs.merge && words[i].length <= 3 && !merged && i > 0 && !words[i].startsWith('$')) {
                 var index = preparedChunks.length - 1;
                 preparedChunks[index].text += ' ' + words[i];
                 preparedChunks[index].sentenceEnd = isSentenceEnd;
                 merged = true;
             } else {
+                // if (words[i].startsWith('$') && !words[i].startsWith('$$')) {
+                //     words[i] = '<span class="inline-eq">' + words[i] + '</span>';
+                // }
                 // Add the word or TeX equation as a new chunk
                 preparedChunks.push({text: words[i], sentenceEnd: isSentenceEnd});
                 merged = false;
@@ -85,18 +88,26 @@ function stop() {
 function flashWords(array) {
     var chunk = array[readIndex],
         length = array.length;
-    if(readIndex == length) {
+    if (readIndex == length) {
         stop();
         readIndex = 0;
     } else {
         readIndex++;
     }
-    if (chunk.text.startsWith('$')) {
-        $('#word').html(chunk.text);
-        MathJax.typeset([document.getElementById('word')]);
-    } else {
-        $('#word').html(chunk.text);
+
+    $('#word').html(chunk.text);  // Set the text or equation in the display element
+
+    if (chunk.text.includes('$') && !chunk.text.startsWith('$$')) {
+        // Process as inline equation
+        MathJax.typesetPromise([document.getElementById('word')]).then(function() {
+            // Additional logic after typesetting can be placed here if needed
+        });
+    } else if (chunk.text.startsWith('$$')) {
+        // Process as display equation
+        $('#word .mjx-chtml').css('display', 'block');
+        MathJax.typesetPromise([document.getElementById('word')]);
     }
+    
     $('#text-progress').attr({
         'max': preparedChunks.length,
         'value': readIndex,
