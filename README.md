@@ -9,4 +9,4 @@ I'll add more features in the future, such as:
 - More options
 - A bookmarklet
 - Responsive layout for mobiles, tablets, etc.
-- Night mode
+- [x] Night mode
