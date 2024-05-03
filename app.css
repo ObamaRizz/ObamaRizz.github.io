@@ -70,9 +70,9 @@ em {
     height: 30%;
 }
 #word .mjx-chtml {
-    font-size: 72px;
     display: inline-block;
     vertical-align: middle;
+    font-size: 72px;
 }
 
 #word .mjx-chtml[display="true"] {
@@ -80,6 +80,12 @@ em {
     font-size: 48px;
     text-align: center;
     margin: 20px 0;
+}
+
+.inline-eq {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 72px;
 }
 #options {
     margin: 10px 0;

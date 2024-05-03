@@ -49,9 +49,9 @@ function prepare(text) {
                 preparedChunks[index].sentenceEnd = isSentenceEnd;
                 merged = true;
             } else {
-                if (words[i].startsWith('$') && !words[i].startsWith('$$')) {
-                    words[i] = '<span class="inline-eq">' + words[i] + '</span>';
-                }
+                // if (words[i].startsWith('$') && !words[i].startsWith('$$')) {
+                //     words[i] = '<span class="inline-eq">' + words[i] + '</span>';
+                // }
                 // Add the word or TeX equation as a new chunk
                 preparedChunks.push({text: words[i], sentenceEnd: isSentenceEnd});
                 merged = false;
@@ -94,12 +94,19 @@ function flashWords(array) {
     } else {
         readIndex++;
     }
-    if (chunk.text.startsWith('$$')) {
-        $('#word').html(chunk.text).find('.mjx-chtml').attr('display', 'true');
-    } else {
-        $('#word').html(chunk.text);
+
+    $('#word').html(chunk.text);  // Set the text or equation in the display element
+
+    if (chunk.text.includes('$') && !chunk.text.startsWith('$$')) {
+        // Process as inline equation
+        MathJax.typesetPromise([document.getElementById('word')]).then(function() {
+            // Additional logic after typesetting can be placed here if needed
+        });
+    } else if (chunk.text.startsWith('$$')) {
+        // Process as display equation
+        $('#word .mjx-chtml').css('display', 'block');
+        MathJax.typesetPromise([document.getElementById('word')]);
     }
-    MathJax.typeset([document.getElementById('word')]);
     
     $('#text-progress').attr({
         'max': preparedChunks.length,
