@@ -70,8 +70,8 @@ em {
     height: 30%;
 }
 #word .mjx-chtml {
-    display: inline-block;
-    vertical-align: middle;
+    margin: auto !important;  /* Forces centering despite MathJax's default styling */
+    display: block !important;  /* May help with centering block-level elements */
     font-size: 72px;
 }
 
