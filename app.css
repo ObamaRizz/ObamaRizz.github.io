@@ -71,6 +71,15 @@ em {
 }
 #word .mjx-chtml {
     font-size: 72px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#word .mjx-chtml[display="true"] {
+    display: block;
+    font-size: 48px;
+    text-align: center;
+    margin: 20px 0;
 }
 #options {
     margin: 10px 0;
