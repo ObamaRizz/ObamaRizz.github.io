@@ -13,42 +13,52 @@ var readInterval = null,
 function prepare(text) {
     preparedChunks = [];
 
-    // Splitting text into an array of words, and some cleanup
-    var lines = text.split('\n'),
-        words = [];
-    for(i = 0; i < lines.length; i++) {
-        var lineWords = lines[i].split(' ');
-        for(i2 = 0; i2 < lineWords.length; i2++) {
-            if(lineWords[i2] !== '') {
-                var trimmedWord = $('<div />').text($.trim(lineWords[i2])).html();
-                words.push(trimmedWord);
-            }
-        }
-    }
+    // Split the text into an array of words and TeX equations
+    // The regular expression matches:
+    // - TeX equations enclosed in $$ or $
+    // - Non-whitespace characters (words)
+    var regex = /(\$\$.*?\$\$|\$.*?\$)|([^\s]+)/g;
+    var words = text.match(regex);
+    // for(i = 0; i < lines.length; i++) {
+    //     var lineWords = lines[i].split(' ');
+    //     for(i2 = 0; i2 < lineWords.length; i2++) {
+    //         if(lineWords[i2] !== '') {
+    //             var trimmedWord = $('<div />').text($.trim(lineWords[i2])).html();
+    //             words.push(trimmedWord);
+    //         }
+    //     }
+    // }
 
     var merged = false,
         dotPattern = /.*\./;
     for(i = 0; i < words.length; i++) {
         if(word !== '') {
             var isSentenceEnd = false;
-            // There will be a longer delay after sentence endings
+            // Check if the current word ends with a dot (sentence end)
             if(words[i].match(dotPattern)) {
                 isSentenceEnd = true;
             }
-            // If a word is not longer than 3 chars, we merge it with the previous
+            // Merge short words (length <= 3) with the previous word if:
+            // - Merging is enabled (prefs.merge)
+            // - The word is not merged with the previous word already
+            // - The current index is greater than 0 (not the first word)
+            // - The current word is not a TeX equation (doesn't start with $)
             if(prefs.merge && words[i].length <= 3 && !merged && i > 0) {
                 var index = preparedChunks.length - 1;
                 preparedChunks[index].text += ' ' + words[i];
                 preparedChunks[index].sentenceEnd = isSentenceEnd;
                 merged = true;
             } else {
+                // Add the word or TeX equation as a new chunk
                 preparedChunks.push({text: words[i], sentenceEnd: isSentenceEnd});
                 merged = false;
             }
         }
     }
 
+    // Update the text info with the number of words
     $('#text-info').html('Words: ' + words.length).show();
+    // Set the 'prepared' data attribute on the body element to true
     $('body').data('prepared', true);
 }
 
