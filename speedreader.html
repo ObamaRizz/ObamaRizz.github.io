@@ -25,11 +25,14 @@
                 }
             };
         </script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script> 
     </head>
     <body>
         <div id="container">
             <h1>Speed reader</h1>
-            <textarea id="text-to-read">Wikipedia: Speed reading is the name for a number of ways to increase the speed at which a text can be read, so that the important facts of the text can still be understood. There are different ways to improve reading speed, but they are all similar. A trained reader is able to read and understand between 200 and 300 words per minute, for a text that is not very difficult to understand. Better training can improve this speed to over 1000 words per minute. Using a lot of exercise, it is possible to increase reading speed further. The best readers can read between 3000 and 4000 words per minute, and understand about 80% of them.</textarea>
+            <textarea id="text-to-read">This is an inline equation: $E = mc^2$. And this is a block equation:
+
+                $$\int_0^1 x^2 dx = \frac{1}{3}$$</textarea>
             <div id="reading-screen">
                 <div id="word"></div>
                 <input id="text-progress" type="range" />
