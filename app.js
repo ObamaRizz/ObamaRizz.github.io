@@ -91,7 +91,12 @@ function flashWords(array) {
     } else {
         readIndex++;
     }
-    $('#word').html(chunk.text);
+    if (chunk.text.startsWith('$')) {
+        $('#word').html(chunk.text);
+        MathJax.typeset([document.getElementById('word')]);
+    } else {
+        $('#word').html(chunk.text);
+    }
     $('#text-progress').attr({
         'max': preparedChunks.length,
         'value': readIndex,
