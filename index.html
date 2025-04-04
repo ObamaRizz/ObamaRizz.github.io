@@ -3,7 +3,6 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Speed reader</title>
-        <link href='http://fonts.googleapis.com/css?family=Crete+Round:400,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="app.css" />
         <script>
             window.MathJax = {
@@ -17,31 +16,35 @@
                 startup: {
                     pageReady: function () {
                         return MathJax.startup.defaultPageReady().then(function () {
-                            document.querySelectorAll('textarea').forEach((node) => {
-                                MathJax.typesetPromise([node]);
-                            });
+                            // Initial typesetting for the textarea if needed
+                            // MathJax.typesetPromise([document.getElementById('text-to-read')]);
+                            // Note: Typesetting the textarea directly might be slow/complex.
+                            // The current JS typesets the #word div when displaying.
                         });
                     }
                 }
             };
         </script>
-        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script> 
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
     </head>
     <body>
         <div id="container">
             <h1>Speed reader</h1>
-            <textarea id="text-to-read">This is an inline equation: $E = mc^2$. And this is a block equation:
-
-                $$\int_0^1 x^2 dx = \frac{1}{3}$$</textarea>
+            <textarea id="text-to-read">Paste text here...
+This is an inline equation: $E = mc^2$.
+And this is a block equation:
+$$\int_0^1 x^2 dx = \frac{1}{3}$$
+You can include multiple paragraphs and equations. Speed reading will show one word or equation chunk at a time.
+            </textarea>
             <div id="reading-screen">
-                <div id="word"></div>
-                <input id="text-progress" type="range" />
-            </div>
+                <div id="word"></div> <input id="text-progress" type="range" value="0" /> </div>
             <div id="options">
                 <div class="row">
                     <span id="wpm">Words per minute (WPM):</span>
-                    <input id="reading-speed" type="number" value="200" step="25" min="0" max="1000" />
-                    <span id="text-info"></span>
+                    <input id="reading-speed" type="number" value="200" step="25" min="25" max="1000" />
+                    <span id="text-info">
+                        Word: <span id="current-word">0</span> / <span id="total-words">0</span>
+                    </span>
                 </div>
                 <div class="row">
                     <label for="merge" title="Words shorter than 4 characters are displayed together with the previous word">Merge short words:</label>
@@ -51,15 +54,13 @@
                     <label for="night-mode">Night mode:</label>
                     <input type="checkbox" id="night-mode" />
                 </div>
-                
             </div>
             <button class="btn" id="start">Read!</button>
             <button class="btn" id="new">New text</button>
         </div>
         <div id="other">
             <div id="desc">
-                <p>Paste the text you want to speedread, and click the <em>Read!</em> button. Additionally, you can set the reading speed, but the default 200 words per minute is optimal for an untrained reader.
-                </p>
+                <p>Paste the text you want to speedread into the box above, and click the <em>Read!</em> button. Adjust the reading speed (WPM) as needed.</p>
                 <p>Keyboard shortcuts:</p>
                 <ul>
                     <li><em>P</em> or <em>Space</em>: Pause/resume</li>
@@ -69,7 +70,7 @@
                 </ul>
             </div>
         </div>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="jquery-1.8.3.min.js"><\/script>')</script>
         <script src="app.js"></script>
     </body>
