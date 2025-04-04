@@ -1,16 +1,25 @@
+/* Add the custom font rule at the top */
+@font-face {
+    font-family: "FastFont"; /* Name you'll use in CSS */
+    src: url("Fast_Sans.ttf") format("truetype"); /* Path relative to CSS file. Ensure Fast_Sans.ttf is in the same folder! */
+    font-display: swap; /* Improves loading performance */
+}
+
 /* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}
 
 body {
     background: #f2f1ef;
     color: #3d3c37;
-    font-family: 'Crete Round', 'Georgia', 'Times New Roman';
+    /* Use your new font here! Added fallback standard fonts */
+    font-family: "FastFont", sans-serif;
     font-size: 16px;
 }
 h1 {
     font-size: 26px;
     text-align: center;
     margin-bottom: 15px;
+    /* Ensure h1 also uses the new font if desired, it inherits from body by default */
 }
 p {
     line-height: 1.5em;
@@ -19,6 +28,7 @@ p {
 }
 em {
     font-weight: normal;
+    font-style: normal; /* Ensure em doesn't force italics if FastFont doesn't have them */
     color: #4BA9A9;
 }
 #container {
@@ -42,6 +52,7 @@ em {
     border-radius: 3px;
     border: 1px solid #3d3c37;
     background: #fff;
+    /* Keep monospace for the text input area */
     font-family: 'Consolas', monospace;
     font-size: 14px;
     color: #3d3c37;
@@ -62,27 +73,31 @@ em {
     display: flex;  /* Enables flexbox properties */
     justify-content: center;  /* Horizontally centers the content */
     align-items: center;  /* Vertically centers the content */
-    font-size: 24px;  /* Adjust based on your preference */
+    font-size: 72px;  /* Adjust based on your preference - Increased size for reading */
     margin: auto;  /* Ensures the element is centered in its container */
+    /* It will inherit FastFont from body */
 }
 
+/* Styles for MathJax elements within the #word container */
 #word .mjx-chtml {
     margin: auto !important;  /* Forces centering despite MathJax's default styling */
     display: block !important;  /* May help with centering block-level elements */
-    font-size: 72px;
+    font-size: 72px; /* Ensure MathJax font size matches #word or is appropriate */
 }
 
+/* Styles for display equations specifically */
 #word .mjx-chtml[display="true"] {
     display: block;
-    font-size: 48px;
+    font-size: 48px; /* Slightly smaller for block equations? Adjust as needed */
     text-align: center;
     margin: 20px 0;
 }
 
+/* Style for inline equations if needed, though handled by MathJax */
 .inline-eq {
     display: inline-block;
     vertical-align: middle;
-    font-size: 72px;
+    font-size: 72px; /* Match #word font size */
 }
 #options {
     margin: 10px 0;
@@ -128,7 +143,8 @@ input[type="checkbox"] {
     color: #fff;
     text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
     cursor: pointer;
-    font-family: 'Crete Round', 'Georgia', 'Times New Roman';
+    /* Apply FastFont to buttons too */
+    font-family: "FastFont", sans-serif;
 }
 .btn:hover {
     background: -webkit-linear-gradient(#75c2c2, #4BA9A9);
@@ -159,6 +175,7 @@ body.night {
 .night #text-to-read {
     background: #111;
     color: #ddd;
+    border-color: #555; /* Adjust border for night mode */
 }
 .night #word {
     color: #fff;
@@ -167,6 +184,7 @@ body.night {
     background-color: #222;
     color: #ddd;
     border-width: 1px;
+    border-color: #555; /* Adjust border for night mode */
 }
 
 
@@ -177,6 +195,7 @@ body.night {
         width: auto;
         margin-top: 0;
         border-radius: 0;
+        padding: 10px; /* Adjust padding for smaller screens */
     }
     #text-to-read, #reading-screen {
         box-sizing: border-box;
@@ -185,9 +204,16 @@ body.night {
     }
     #other {
         width: auto;
-        margin: 0;
+        margin: 10px; /* Adjust margin */
+        padding: 10px; /* Adjust padding */
     }
     #word {
-        font-size: 50px;
+        font-size: 50px; /* Adjust font size for smaller screens */
     }
+    #word .mjx-chtml, #word .inline-eq {
+         font-size: 50px; /* Adjust MathJax size too */
+    }
+     #word .mjx-chtml[display="true"] {
+         font-size: 38px; /* Adjust display equation size */
+     }
 }
